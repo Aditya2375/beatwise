@@ -27,7 +27,7 @@
   <section class="hero">
     <p class="eyebrow">ECG beat classification · MIT-BIH Arrhythmia Database</p>
     <h1>Every heartbeat, sorted.<br><em>On patients the model never met.</em></h1>
-    <p class="lede">One ECG lead in. Four beat classes out. The network below was trained on 22 patients and is scored on 22 others, which is the only test that means anything. It runs in this tab, beat by beat, and you can check each call against the cardiologist's label.</p>
+    <p class="lede">One ECG lead in. Four beat classes out. The network below was trained on 22 patients and is scored on 22 others, which is the fair test. It runs in this tab, beat by beat, and you can check each call against the cardiologist's label.</p>
     <dl class="figures" id="figures" aria-live="polite">
       <div><dt>Beats scored</dt><dd data-k="n">…</dd></div>
       <div><dt>Overall accuracy</dt><dd data-k="acc">…</dd></div>
@@ -95,8 +95,8 @@
       <li><b>The split is by patient.</b> Beats from one person look alike, so a random split lets a model memorise people and score high for the wrong reason. Training uses the 22 records of the standard DS1 set, testing uses the 22 different records of DS2 (de Chazal et al., 2004). Design choices were made with patient-wise cross-validation inside DS1.</li>
       <li><b>Cleaning.</b> A 200 ms and a 600 ms median filter remove baseline drift, then a 45 Hz low-pass takes out mains and muscle noise. Each beat is cut from 96 samples before the R peak to 144 after, at 360 Hz.</li>
       <li><b>Compare with the patient's own beats.</b> Beat shape differs a lot between people, so absolute shape generalises badly. For every beat the model measures how far it is from the median of that patient's previous 30 beats: correlation, error, width and peak position. It also gets nine timing numbers (gaps before and after, relative to the recent average). Everything is computed from the past only, so it could run live.</li>
-      <li><b>Model.</b> A small neural network, 15 inputs, two hidden layers (128 and 64), five copies trained from different seeds and averaged. Square-root class weights, input noise and dropout. It trains in seconds on one CPU core.</li>
-      <li><b>In the browser.</b> The feature code and the network are about 130 lines of JavaScript with no libraries. A test checks both against the Python implementation on real beats.</li>
+      <li><b>Model.</b> A small neural network, 15 inputs, two hidden layers (128 and 64), five copies trained from different seeds and averaged. Square-root class weights, input noise and dropout. It is small enough to train on one CPU core.</li>
+      <li><b>In the browser.</b> The feature code and the network are under 100 lines of JavaScript with no libraries. A test checks both against the Python implementation on real beats.</li>
       <li><b>What did not work.</b> A convolutional network on the raw waveform fit the training patients almost perfectly and scored 86.2% on the test patients, worse than a plain tree model. It had learned who the patients were. It also latched onto average heart rate, which identifies a person, so that input was removed from everything that followed.</li>
     </ol>
     <h3>What it is not</h3>
